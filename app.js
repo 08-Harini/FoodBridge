@@ -886,7 +886,16 @@ window.init_my_donations = async function() {
   tbody.innerHTML = '<tr><td colspan="7" class="empty-row">Loading...</td></tr>';
 
   try {
-    const snap = await getDocs(query(collection(db, 'donations'), where('donorId', '==', currentUser.uid), orderBy('createdAt', 'desc')));
+    const snap = await getDocs(
+  query(
+    collection(db, 'donations'),
+    where('donorId', '==', currentUser.uid)
+  )
+);
+
+const donations = snap.docs
+  .map(d => ({ id: d.id, ...d.data() }))
+  .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     tbody.innerHTML = snap.empty
       ? `<tr><td colspan="7" class="empty-row"><p>No donations yet. <a style="color:var(--green);cursor:pointer" onclick="navigate('donate')">Add one!</a></p></td></tr>`
       : snap.docs.map(d => {
