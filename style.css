@@ -438,7 +438,7 @@ tbody tr:hover td { background: #FAFAFA; }
 .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 24px; }
 .chart-box { background: white; border-radius: var(--r); border: 1px solid var(--border); padding: 22px; }
 .chart-box h3 { font-size: .95rem; margin-bottom: 18px; }
-.bar-chart { display: flex; align-items: flex-end; gap: 7px; height: 130px; }
+.bar-chart { display: flex; align-items: flex-end; gap: 7px; height: 130px; margin-top:5px;}
 .bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
 .bar { background: var(--green); border-radius: 4px 4px 0 0; width: 100%; min-height: 4px; transition: height .6s ease; }
 .bar-lbl { font-size: .68rem; color: var(--muted); }
