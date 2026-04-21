@@ -659,7 +659,7 @@ window.doDonate = async function(e) {
       createdAt: serverTimestamp()
     });
 
-    toast('Food listed! 🌾');
+    toast('Food listed! ');
     navigate('my-donations');
   } catch (e) {
     toast(e.message, 'error');
