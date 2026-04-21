@@ -55,5 +55,4 @@ Backend and Database
 - Firebase Firestore
 - Firebase Storage
 
-Deployment
-- GitHub Pages
+
