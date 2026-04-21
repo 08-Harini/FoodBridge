@@ -1,0 +1,17 @@
+// storage.rules
+// Paste this in Firebase Console → Storage → Rules
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Food images: anyone can read, only auth users can upload
+    match /food-images/{userId}/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024   // Max 5MB
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

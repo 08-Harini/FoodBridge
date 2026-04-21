@@ -1,0 +1,41 @@
+// firestore.rules
+// Paste this in Firebase Console → Firestore → Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users: only owner can read/write their own profile
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Donations: anyone can read available, only donor can write theirs
+    match /donations/{donId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null &&
+        (resource.data.donorId == request.auth.uid ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
+
+    // Requests: receiver creates, donor/receiver can read/update theirs
+    match /requests/{reqId} {
+      allow read: if request.auth != null &&
+        (resource.data.receiverId == request.auth.uid ||
+         resource.data.donorId == request.auth.uid ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+      allow create: if request.auth != null;
+      allow update: if request.auth != null &&
+        (resource.data.donorId == request.auth.uid ||
+         resource.data.receiverId == request.auth.uid);
+    }
+
+    // Notifications: only recipient can read, any auth user can create
+    match /notifications/{notifId} {
+      allow read, update: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+    }
+  }
+}

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodBridge —Share Food Smarter</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div id="app-loader">
+  <div class="loader-text">FoodBridge</div>
+  <div class="loader-bar"></div>
+</div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" data-page="home" href="#home"><span> FoodBridge</span></a>
+    <div class="nav-links">
+      <a data-page="home" href="#home">Home</a>
+      <a data-page="listings" href="#listings">Browse Food</a>
+      <a id="nav-dash-link" data-page="dashboard" href="#dashboard">Dashboard</a>
+    </div>
+    <div id="nav-guest" class="flex gap-2 items-center">
+      <button class="nav-btn nav-btn-outline" data-page="login">Login</button>
+      <button class="nav-btn nav-btn-fill" data-page="register">Join Now</button>
+    </div>
+    <div id="nav-user" class="hidden flex items-center gap-2">
+      <button class="nav-btn nav-btn-fill hidden" data-page="donate" id="nav-donate-btn">+ Donate</button>
+      <div class="user-menu">
+        <button class="user-menu-btn">
+          <div class="user-avatar-sm" id="nav-user-av">U</div>
+          <span id="nav-user-name">User</span>
+          <span class="notif-badge hidden" id="notif-badge-nav">0</span>
+          <i class="fas fa-chevron-down" style="font-size:.7rem;color:var(--muted)"></i>
+        </button>
+        <div class="dropdown">
+          <a data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+          <a data-page="profile"><i class="fas fa-user-cog"></i> Profile</a>
+          <a data-page="notifications"><i class="fas fa-bell"></i> Notifications <span class="notif-badge hidden" id="notif-badge-dd">0</span></a>
+          <a data-page="admin_users" id="nav-admin-link" class="hidden"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+          <hr>
+          <a onclick="doLogout()" class="danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+<div id="toast-container"></div>
+
+<div id="page-home" class="page">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag"> Zero Hunger Initiative</div>
+      <h1>Bridging Food through<br><em>Smarter Connections</em></h1>
+      <p>A platform that connects people to share, discover, and access food seamlessly making everyday food interactions simple and efficient.</p>
+      <div class="hero-btns">
+        <button class="btn-hero-white" data-page="register">&#127828 Donate Food</button>
+        <button class="btn-hero-ghost" data-page="listings">&#129367 Find Food</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="h-stat-num" id="stat-donations">—</div><div class="h-stat-label">Total Donations</div></div>
+        <div><div class="h-stat-num" id="stat-distributed">—</div><div class="h-stat-label">Meals Distributed</div></div>
+        <div><div class="h-stat-num" id="stat-users">—</div><div class="h-stat-label">Registered Users</div></div>
+        <div><div class="h-stat-num" id="stat-available">—</div><div class="h-stat-label">Available Now</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="section bg-cream">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-tag">How It Works</span>
+        <h2>4 Simple Steps to Share Food</h2>
+        <p>FoodBridge makes it incredibly easy — just sign up, list or browse, request, and pickup.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><div class="step-icon">&#128100  </div><h3>Create Profile</h3><p>Set up your account and get started in seconds.</p></div>
+        <div class="step-card"><div class="step-num">2</div><div class="step-icon">🍱</div><h3>Add or Discover</h3><p>List food or Explore food options around you.</p></div>
+        <div class="step-card"><div class="step-num">3</div><div class="step-icon">📩</div><h3>Request & Accept</h3><p>Send requests or accept and manage interactions easily.</p></div>
+        <div class="step-card"><div class="step-num">4</div><div class="step-icon">&#128205</div><h3>Complete Exchange</h3><p>Confirm the pickup and complete the exchange.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-tag">Available Now</span>
+        <h2>Recently Added Food</h2>
+        <p>Fresh donations — request now before they expire!</p>
+      </div>
+      <div class="food-grid" id="home-food-grid"></div>
+      <div class="text-center mt-6">
+        <a href="#listings"><button class="btn btn-outline btn-pill" style="padding:12px 30px" data-page="listings">View All Available Food →</button></a>
+      </div>
+    </div>
+  </section>
+  <section class="section bg-cream">
+    <div class="sec-inner text-center">
+      <h2 style="font-size:2rem;margin-bottom:14px">Every Meal Counts. Join Us Today.</h2>
+      <p class="text-muted" style="max-width:480px;margin:0 auto 28px">Whether you have extra food or need help feeding a community — FoodBridge connects you.</p>
+      <div class="flex gap-3" style="justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-pill" style="padding:13px 30px" data-page="register">I Want to Donate</button>
+        <button class="btn btn-orange btn-pill" style="padding:13px 30px" data-page="register">I Need Food</button>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="page-register" class="page">
+  <div class="section" style="min-height:calc(100vh - 160px)">
+    <div class="container" style="max-width:680px;margin:0 auto">
+      <div class="form-card">
+        <div class="text-center mb-6">
+          <h2 class="form-title">Create Your Account</h2>
+          <p class="form-sub">Join FoodBridge and make a difference</p>
+        </div>
+        <form onsubmit="doRegister(event)">
+          <div class="role-selector">
+            <div class="role-opt" data-role="donor" onclick="selectRole(this)">
+              <div class="role-opt-icon"></div>
+              <div class="role-opt-label">&#127828 Donate Food</div>
+              <div class="role-opt-desc">I have surplus food</div>
+            </div>
+            <div class="role-opt" data-role="receiver" onclick="selectRole(this)">
+              <div class="role-opt-label">&#129367 Receive Food</div>
+              <div class="role-opt-desc">I want to request Food.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Full Name / Organization *</label><input id="reg-name" type="text" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Phone Number</label><input id="reg-phone" type="tel" class="form-input"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email Address *</label><input id="reg-email" type="email" class="form-input" required></div>
+          <div class="form-group"><label class="form-label">City *</label><input id="reg-city" type="text" class="form-input" required></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Password *</label><input id="reg-pass" type="password" class="form-input" required minlength="6"><div class="form-hint">Min 6 characters</div></div>
+            <div class="form-group"><label class="form-label">Confirm Password *</label><input id="reg-confirm" type="password" class="form-input" required></div>
+          </div>
+          <button id="reg-btn" type="submit" class="btn btn-primary btn-full btn-pill" style="padding:12px;font-size:1rem">Create Account →</button>
+          <p class="text-center mt-4 text-muted" style="font-size:.88rem">Already have an account? <a onclick="navigate('login')" style="color:var(--green);font-weight:600;cursor:pointer">Login here</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<div id="page-login" class="page">
+  <div class="section" style="min-height:calc(100vh - 160px)">
+    <div class="container" style="max-width:460px;margin:0 auto">
+      <div class="form-card">
+        <div class="text-center mb-6">
+          <h2 class="form-title">Welcome Back</h2>
+          <p class="form-sub">Sign in to your FoodBridge account</p>
+        </div>
+        <form onsubmit="doLogin(event)">
+          <div class="form-group"><label class="form-label">Email Address</label><input id="login-email" type="email" class="form-input" required autofocus></div>
+          <div class="form-group"><label class="form-label">Password</label><input id="login-pass" type="password" class="form-input" required></div>
+          <button id="login-btn" type="submit" class="btn btn-primary btn-full btn-pill" style="padding:12px;font-size:1rem">Sign In →</button>
+          <p class="text-center mt-4 text-muted" style="font-size:.88rem">New here? <a onclick="navigate('register')" style="color:var(--green);font-weight:600;cursor:pointer">Create an account</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<div id="page-listings" class="page">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <h1>Browse Available Food</h1>
+      <p>Find surplus food near you and request it for free.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-inner">
+      <div class="filter-bar">
+        <div class="form-group"><label class="form-label">Search</label><input id="filter-search" type="text" class="form-input" placeholder="Search food..."></div>
+        <div class="form-group"><label class="form-label">Food Type</label>
+          <select id="filter-type" class="form-input">
+            <option value="">All Types</option>
+            <option value="veg">🟢 Vegetarian</option>
+            <option value="non-veg">🔴 Non-Veg</option>
+            <option value="vegan">🌱 Vegan</option>
+            <option value="mixed">Mixed</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">City</label><input id="filter-city" type="text" class="form-input" placeholder="e.g. Bengaluru"></div>
+        <div>
+          <button class="btn btn-primary" onclick="loadListings()">Filter</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('filter-search').value='';document.getElementById('filter-type').value='';document.getElementById('filter-city').value='';loadListings()">Clear</button>
+        </div>
+      </div>
+      <div class="food-grid" id="listings-grid">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-donate" class="page">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="breadcrumb"><a onclick="navigate('dashboard')" style="cursor:pointer">Dashboard</a> › Add Donation</div>
+      <h1>List a Food Donation</h1>
+      <p>Fill in the details so receivers can find and request your surplus food.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container" style="max-width:780px;margin:0 auto">
+      <div class="form-card">
+        <form onsubmit="doDonate(event)">
+          <h3 style="color:var(--green);font-size:1.1rem;margin-bottom:18px">📦 Food Information</h3>
+          <div class="form-row">
+            
+            <div class="form-group"><label class="form-label">Food Name *</label><input id="don-name" type="text" class="form-input" placeholder="e.g. Rice & Dal, Veg Biryani" required></div>
+            <div class="form-group"><label class="form-label">Category *</label>
+              <select id="don-category" class="form-input">
+                <option value="cooked">Cooked Food</option>
+                <option value="raw">Raw Ingredients</option>
+                <option value="packaged">Packaged Food</option>
+                <option value="bakery">Bakery Items</option>
+                <option value="fruits_veggies">Fruits & Vegetables</option>
+                <option value="beverages">Beverages</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+  <label class="form-label">Contact Number *</label>
+  <input id="donorPhone" type="tel" class="form-input" placeholder="Enter contact number" required>
+</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Food Type *</label>
+              <select id="don-type" class="form-input">
+                <option value="veg">🟢 Vegetarian</option>
+                <option value="non-veg">🔴 Non-Vegetarian</option>
+                <option value="vegan">🌱 Vegan</option>
+                <option value="mixed">Mixed</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Quantity *</label>
+              <div style="display:flex;gap:8px">
+                <input id="don-qty" type="number" class="form-input" min="1" value="1" style="flex:1" required>
+                <select id="don-unit" class="form-input" style="width:120px">
+                  <option value="plates">Plates</option>
+                  <option value="kg">Kg</option>
+                  <option value="liters">Liters</option>
+                  <option value="packets">Packets</option>
+                  <option value="boxes">Boxes</option>
+                  <option value="pieces">Pieces</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description</label><textarea id="don-desc" class="form-input" placeholder="Ingredients, allergens, occasion it was prepared for..."></textarea></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+          <h3 style="color:var(--green);font-size:1.1rem;margin-bottom:18px">📍 Pickup Details</h3>
+          <div class="form-group"><label class="form-label">Pickup Address *</label><input id="don-address" type="text" class="form-input" placeholder="Full address for pickup" required></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">City *</label><input id="don-city" type="text" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Pickup Date *</label><input id="don-pickup-date" type="date" class="form-input" required></div>
+          </div>
+          <div class="form-group"><label class="form-label">Food Expiry Date & Time *</label><input id="don-expiry" type="datetime-local" class="form-input" required><div class="form-hint">After this time, the listing will be marked as expired.</div></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+          <h3 style="color:var(--green);font-size:1.1rem;margin-bottom:18px">📷 Food Photo (Optional)</h3>
+          <div class="form-group">
+            <input id="don-image" type="file" class="form-input" accept="image/*" onchange="previewImg(this)">
+            <div class="form-hint">Max 5MB. JPG, PNG or WEBP.</div>
+            <img id="don-preview" style="display:none;margin-top:10px;max-height:180px;border-radius:8px" alt="Preview">
+          </div>
+          <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px">
+            <button type="button" class="btn btn-secondary" onclick="navigate('dashboard')">Cancel</button>
+            <button id="don-btn" type="submit" class="btn btn-primary" style="padding:11px 28px">Submit Donation</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-dashboard" class="page">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-profile">
+        <div class="sidebar-av" id="dash-av">U</div>
+        <div class="sidebar-name" id="dash-name">User</div>
+        <div class="sidebar-role" id="dash-role">role</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a onclick="navigate('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a onclick="navigate('donate')" id="sb-donate"><i class="fas fa-plus-circle"></i> Add Donation</a>
+        <a onclick="navigate('listings')" id="sb-browse"><i class="fas fa-search"></i> Browse Food</a>
+        <a onclick="navigate('profile')"><i class="fas fa-user-cog"></i> Profile</a>
+        <a onclick="navigate('admin_users')" id="dash-admin-btn" class="hidden"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+        <a onclick="doLogout()" style="color:#DC2626"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="main-area">
+      <div class="content-hdr">
+        <h2>Dashboard</h2>
+        <button class="btn btn-primary hidden" onclick="navigate('donate')" id="dash-donate-btn">+ Donate Food</button>
+      </div>
+ 
+      <div id="dash-donor-section">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-icon ic-green">🍱</div><div><div class="stat-num" id="d-stat-total">0</div><div class="stat-lbl">Total Donations</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-orange">✅</div><div><div class="stat-num" id="d-stat-avail">0</div><div class="stat-lbl">Available</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-blue">🤝</div><div><div class="stat-num" id="d-stat-dist">0</div><div class="stat-lbl">Distributed</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-red">📩</div><div><div class="stat-num" id="d-stat-pend">0</div><div class="stat-lbl">Pending Requests</div></div></div>
+        </div>
+        <div class="table-wrap mb-6">
+          <div class="table-hdr"><h3>⚡Pending Requests</h3><button class="btn btn-sm btn-secondary" onclick="navigate('my-donations')">View All</button></div>
+          <div class="table-scroll"><table><thead><tr><th>Food</th><th>Receiver</th><th>Qty</th><th>Purpose</th><th>When</th><th>Action</th></tr></thead><tbody id="d-pending-requests"><tr><td colspan="6" class="empty-row">Loading...</td></tr></tbody></table></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-hdr"><h3>My Recent Donations</h3><button class="btn btn-sm btn-secondary" onclick="navigate('my-donations')">View All</button></div>
+          <div class="table-scroll"><table><thead><tr><th>Food Name</th><th>Qty</th><th>City</th><th>Status</th><th>Expires</th><th>Date</th><th>Actions</th></tr></thead><tbody id="d-recent-tbody"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <div id="dash-receiver-section">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-icon ic-green">📋</div><div><div class="stat-num" id="r-stat-total">0</div><div class="stat-lbl">Total Requests</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-orange">⏳</div><div><div class="stat-num" id="r-stat-pend">0</div><div class="stat-lbl">Pending</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-blue">✅</div><div><div class="stat-num" id="r-stat-acc">0</div><div class="stat-lbl">Accepted</div></div></div>
+          <div class="stat-card"><div class="stat-icon ic-green">🎉</div><div><div class="stat-num" id="r-stat-done">0</div><div class="stat-lbl">Completed</div></div></div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-hdr"><h3>My Food Requests</h3><button class="btn btn-sm btn-primary" onclick="navigate('listings')">Find More Food</button></div>
+          <div class="table-scroll"><table><thead><tr><th>Food Item</th><th>Qty</th><th>Status</th><th>Purpose</th><th>When</th><th>Action</th></tr></thead><tbody id="r-requests-tbody"><tr><td colspan="6" class="empty-row">Loading...</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div id="dash-admin-section">
+        <div class="stats-row">
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_users')">
+            <div class="stat-icon ic-blue">👥</div>
+            <div><div class="stat-num" id="a-stat-users">—</div><div class="stat-lbl">Total Users</div></div>
+          </div>
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_donations')">
+            <div class="stat-icon ic-green">&#127828</div>
+            <div><div class="stat-num" id="a-stat-dons">—</div><div class="stat-lbl">Donations</div></div>
+          </div>
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_donations')">
+            <div class="stat-icon ic-orange">✅</div>
+            <div><div class="stat-num" id="a-stat-avail">—</div><div class="stat-lbl">Available</div></div>
+          </div>
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_donations')">
+            <div class="stat-icon ic-blue">🤝</div>
+            <div><div class="stat-num" id="a-stat-dist">—</div><div class="stat-lbl">Distributed</div></div>
+          </div>
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_requests')">
+            <div class="stat-icon ic-red">📩</div>
+            <div><div class="stat-num" id="a-stat-reqs">—</div><div class="stat-lbl">Total Requests</div></div>
+          </div>
+          <div class="stat-card" style="cursor:pointer" onclick="navigate('admin_requests')">
+            <div class="stat-icon ic-orange">⏳</div>
+            <div><div class="stat-num" id="a-stat-pend">—</div><div class="stat-lbl">Pending</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px">
+          <button class="btn btn-primary" onclick="navigate('admin_users')"><i class="fas fa-users"></i> Manage Users</button>
+          <button class="btn btn-secondary" onclick="navigate('admin_donations')"><i class="fas fa-hand-holding-heart"></i> All Donations</button>
+          <button class="btn btn-secondary" onclick="navigate('admin_requests')"><i class="fas fa-inbox"></i> All Requests</button>
+          <button class="btn btn-secondary" onclick="navigate('admin_reports')"><i class="fas fa-chart-bar"></i> Reports</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:28px">
+          <div class="chart-box">
+            <h3 style="margin-bottom:16px">📦 Donations by Category</h3>
+            <div class="bar-chart" id="a-cat-chart" style="min-height:130px;display:flex;align-items:flex-end;gap:10px"></div>
+          </div>
+          <div class="table-wrap">
+            <div class="table-hdr"><h3>🕐 Recent Donations</h3><button class="btn btn-sm btn-secondary" onclick="navigate('admin_donations')">View All</button></div>
+            <div class="table-scroll">
+              <table><thead><tr><th>Food</th><th>Donor</th><th>City</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="a-recent-tbody"><tr><td colspan="5" class="empty-row">Loading...</td></tr></tbody></table>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-hdr"><h3>👤 Recent Users</h3><button class="btn btn-sm btn-secondary" onclick="navigate('admin_users')">View All</button></div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>City</th><th>Status</th><th>Joined</th></tr></thead>
+              <tbody id="a-recent-users-tbody"><tr><td colspan="6" class="empty-row">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+ 
+      </div>
+    </main>
+  </div>
+</div>
+<div id="page-profile" class="page">
+  <div class="page-hero"><div class="page-hero-inner"><h1>My Profile</h1><p>Manage your account details.</p></div></div>
+  <div class="section"><div class="container" style="max-width:640px;margin:0 auto">
+    <div style="background:white;border-radius:var(--r);border:1px solid var(--border);padding:28px;margin-bottom:22px;text-align:center;box-shadow:var(--shadow-sm)">
+      <div style="width:72px;height:72px;background:var(--green);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;margin:0 auto 12px" id="prof-av-big">U</div>
+      <p class="fw-6" style="font-size:1rem" id="prof-name-display"></p>
+      <span class="sidebar-role" id="prof-role">role</span>
+      <p class="text-muted" style="font-size:.85rem;margin-top:6px" id="prof-email"></p>
+    </div>
+    <div class="form-card">
+      <h3 style="margin-bottom:20px">Edit Profile</h3>
+      <form onsubmit="doUpdateProfile(event)">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Full Name *</label><input id="prof-name" type="text" class="form-input" required oninput="document.getElementById('prof-name-display').textContent=this.value;document.getElementById('prof-av-big').textContent=this.value[0]?.toUpperCase()||'U'"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input id="prof-phone" type="tel" class="form-input"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">City</label><input id="prof-city" type="text" class="form-input"></div>
+          <div class="form-group"><label class="form-label">Address</label><input id="prof-addr" type="text" class="form-input"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:12px">
+          <button type="button" class="btn btn-secondary" onclick="navigate('dashboard')">Cancel</button>
+          <button id="prof-btn" type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div></div>
+</div>
+<div id="page-admin_users" class="page">
+  <div class="admin-layout">
+    <aside class="admin-side">
+      <div class="admin-side-logo"> FoodBridge Admin</div>
+      <a onclick="navigate('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a onclick="navigate('admin_users')" class="active"><i class="fas fa-users"></i> Users</a>
+      <a onclick="navigate('admin_donations')"><i class="fas fa-hand-holding-heart"></i> Donations</a>
+      <a onclick="navigate('admin_requests')"><i class="fas fa-inbox"></i> Requests</a>
+      <a onclick="navigate('admin_reports')"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a onclick="doLogout()" style="color:#FC8181;margin-top:auto"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+    <div class="admin-main-area">
+      <div class="admin-page-hdr"><h1>Manage Users</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>City</th><th>Status</th><th>Joined</th></tr></thead>
+        <tbody id="admin-users-tbody"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+  </div>
+</div>
+ 
+<div id="page-admin_donations" class="page">
+  <div class="admin-layout">
+    <aside class="admin-side">
+      <div class="admin-side-logo"> FoodBridge Admin</div>
+      <a onclick="navigate('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a onclick="navigate('admin_users')"><i class="fas fa-users"></i> Users</a>
+      <a onclick="navigate('admin_donations')" class="active"><i class="fas fa-hand-holding-heart"></i> Donations</a>
+      <a onclick="navigate('admin_requests')"><i class="fas fa-inbox"></i> Requests</a>
+      <a onclick="navigate('admin_reports')"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a onclick="doLogout()" style="color:#FC8181"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+    <div class="admin-main-area">
+      <div class="admin-page-hdr"><h1>All Donations</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Food</th><th>Donor</th><th>City</th><th>Qty</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="admin-don-tbody"><tr><td colspan="6" class="empty-row">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div id="page-admin_requests" class="page">
+  <div class="admin-layout">
+    <aside class="admin-side">
+      <div class="admin-side-logo">FoodBridge Admin</div>
+      <a onclick="navigate('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a onclick="navigate('admin_users')"><i class="fas fa-users"></i> Users</a>
+      <a onclick="navigate('admin_donations')"><i class="fas fa-hand-holding-heart"></i> Donations</a>
+      <a onclick="navigate('admin_requests')" class="active"><i class="fas fa-inbox"></i> Requests</a>
+      <a onclick="navigate('admin_reports')"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a onclick="doLogout()" style="color:#FC8181"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+    <div class="admin-main-area">
+      <div class="admin-page-hdr"><h1>All Requests</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Food</th><th>Donor</th><th>Receiver</th><th>Qty</th><th>Status</th><th>Purpose</th><th>When</th></tr></thead>
+        <tbody id="admin-req-tbody"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div id="page-admin_reports" class="page">
+  <div class="admin-layout">
+    <aside class="admin-side">
+      <div class="admin-side-logo"> FoodBridge Admin</div>
+      <a onclick="navigate('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a onclick="navigate('admin_users')"><i class="fas fa-users"></i> Users</a>
+      <a onclick="navigate('admin_donations')"><i class="fas fa-hand-holding-heart"></i> Donations</a>
+      <a onclick="navigate('admin_requests')"><i class="fas fa-inbox"></i> Requests</a>
+      <a onclick="navigate('admin_reports')" class="active"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a onclick="doLogout()" style="color:#FC8181"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+    <div class="admin-main-area">
+      <div class="admin-page-hdr">
+        <h1>Reports & Analytics</h1>
+        <button class="btn btn-secondary btn-sm" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--green),var(--green-mid));color:white;border-radius:var(--r);padding:24px 28px;margin-bottom:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:18px">
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-total">—</div><div style="opacity:.8;font-size:.82rem">Donations</div></div>
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-dist">—</div><div style="opacity:.8;font-size:.82rem">Distributed</div></div>
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-eff">—</div><div style="opacity:.8;font-size:.82rem">Efficiency</div></div>
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-waste">—</div><div style="opacity:.8;font-size:.82rem">Expired</div></div>
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-donors">—</div><div style="opacity:.8;font-size:.82rem">Donors</div></div>
+        <div class="text-center"><div style="font-size:2rem;font-weight:700;font-family:'Fraunces',serif" id="rep-receivers">—</div><div style="opacity:.8;font-size:.82rem">Receivers</div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-box"><h3>📦 Donations by Category</h3><div class="bar-chart" id="a-cat-chart"></div></div>
+        <div class="chart-box"><h3>🏙️ Food by City</h3><div id="rep-city-bars"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-my-donations" class="page">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="breadcrumb"><a onclick="navigate('dashboard')" style="cursor:pointer">Dashboard</a> &rsaquo; My Donations</div>
+      <h1>My Donations</h1>
+      <p>Track all your food donations and their current status.</p>
+    </div>
+  </div>
+  <div class="section"><div class="sec-inner">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+      <button class="btn btn-primary" onclick="navigate('donate')"><i class="fas fa-plus"></i> Add New</button>
+    </div>
+    <div class="table-wrap"><div class="table-scroll">
+      <table><thead><tr><th>Food Name</th><th>Qty</th><th>City</th><th>Status</th><th>Expires</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody id="my-don-tbody"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody></table>
+    </div></div>
+  </div></div>
+</div>
+<div id="page-my-requests" class="page">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="breadcrumb"><a onclick="navigate('dashboard')" style="cursor:pointer">Dashboard</a> &rsaquo; My Requests</div>
+      <h1>My Requests</h1>
+      <p>Track all your food requests and their status.</p>
+    </div>
+  </div>
+  <div class="section"><div class="sec-inner">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+      <button class="btn btn-primary" onclick="navigate('listings')"><i class="fas fa-search"></i> Browse Food</button>
+    </div>
+    <div class="table-wrap"><div class="table-scroll">
+      <table><thead><tr><th>Food Item</th><th>Qty</th><th>Status</th><th>Purpose</th><th>When</th><th>Action</th></tr></thead>
+      <tbody id="my-req-tbody"><tr><td colspan="6" class="empty-row">Loading...</td></tr></tbody></table>
+    </div></div>
+  </div></div>
+</div>
+<div id="page-notifications" class="page">
+  <div class="page-hero"><div class="page-hero-inner"><h1>Notifications</h1><p>Stay updated on your donations and requests.</p></div></div>
+  <div class="section"><div class="container" style="max-width:760px;margin:0 auto">
+    <div id="notif-list"><p class="text-muted text-center" style="padding:40px">Loading...</p></div>
+  </div></div>
+</div>
+<div id="page-food-detail" class="page">
+  <div class="section">
+    <div class="container" style="max-width:1000px;margin:0 auto">
+      <div class="breadcrumb mb-4" style="margin-bottom:16px">
+        <a onclick="navigate('listings')" style="color:var(--green);cursor:pointer">&larr; Browse Food</a>
+        
+      </div>
+      <div id="food-detail-content"><p class="text-muted text-center" style="padding:60px">Loading...</p></div>
+    </div>
+  </div>
+</div>
+ 
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name"> FoodBridge</div>
+      <p>A simple space where people can offer or find food around them.Focused on ease,clarity, and everyday usability.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <a onclick="navigate('home')" style="cursor:pointer">Home</a>
+      <a onclick="navigate('listings')" style="cursor:pointer">Browse Food</a>
+      <a onclick="navigate('register')" style="cursor:pointer">Register</a>
+      <a onclick="navigate('login')" style="cursor:pointer">Login</a>
+    </div>
+    <div>
+      <h4>For Donors</h4>
+      <a onclick="navigate('donate')" style="cursor:pointer">Donate Food</a>
+      <a onclick="navigate('my-donations')" style="cursor:pointer">My Donations</a>
+    </div>
+    <div>
+      <h4>For Receivers</h4>
+      <a onclick="navigate('listings')" style="cursor:pointer">Find Food</a>
+      <a onclick="navigate('my-requests')" style="cursor:pointer">My Requests</a>
+    </div>
+  </div>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>
+ 
+
+
